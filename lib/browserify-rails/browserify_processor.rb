@@ -73,28 +73,21 @@ module BrowserifyRails
       cmd
     end
 
-    # Run browserify with `data` on standard input.
-    #
-    # We are passing the data via stdin, so that earlier preprocessing steps are
-    # respected. If you had, say, an "application.js.coffee.erb", passing the
-    # filename would fail, because browserify would read the original file with
-    # ERB tags and fail. By passing the data via stdin, we get the expected
-    # behavior of success, because everything has been compiled to plain
-    # javascript at the time this processor is called.
+    # Run browserify
     #
     # @raise [BrowserifyRails::BrowserifyError] if browserify does not succeed
     # @param options [String] Options for browserify
     # @return [String] Output on standard out
     def run_browserify(options)
       command = "#{browserify_cmd} #{options}"
-      directory = File.dirname(file)
-      stdout, stderr, status = Open3.capture3(command, stdin_data: data, chdir: directory)
 
-      if !status.success?
-        raise BrowserifyRails::BrowserifyError.new("Error while running `#{command}`:\n\n#{stderr}")
+      output = `#{command} #{file}`
+
+      if !$?.success?
+        raise BrowserifyRails::BrowserifyError.new("Error while running `#{command}`")
       end
 
-      stdout
+      output
     end
   end
 end
