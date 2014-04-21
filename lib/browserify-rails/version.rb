@@ -1,3 +1,3 @@
 module BrowserifyRails
-  VERSION = "0.2.1-filaraujo"
+  VERSION = "0.2.2-filaraujo"
 end
